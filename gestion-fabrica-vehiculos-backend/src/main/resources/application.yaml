@@ -1,3 +1,83 @@
 spring:
   application:
-    name: gestion-fabrica-vehiculos-backend
+    name: gestion-fabrica-vehiculos
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:fabrica_vehiculos}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    username: ${DB_USERNAME:fabrica_app}
+    password: ${DB_PASSWORD:fabrica_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      pool-name: FabricaHikariPool
+      minimum-idle: 2
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: UTC
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    db:
+      enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+app:
+  production-orders:
+    maximum-lines: ${PRODUCTION_ORDER_MAXIMUM_LINES:20}
+    maximum-vehicles-per-line: ${PRODUCTION_ORDER_MAXIMUM_VEHICLES_PER_LINE:100}
+    reservation-batch-size: ${PRODUCTION_ORDER_RESERVATION_BATCH_SIZE:50}
+
+logging:
+  level:
+    root: INFO
+    com.practica.fabricavehiculos: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
