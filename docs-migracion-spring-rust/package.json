@@ -1,20 +1,22 @@
 {
-  "name": "fabrica-spring-migration-guide",
+  "name": "fabrica-architecture-explorer-rust",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build:frontend": "vite build",
+    "build": "vite build && cargo build --release",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node --test tests/content.test.mjs",
+    "test": "node --test tests/content.test.mjs && cargo test",
     "test:e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.7",
     "highlight.js": "^11.11.1",
-    "marked": "^15.0.12"
+    "marked": "^15.0.12",
+    "three": "^0.181.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

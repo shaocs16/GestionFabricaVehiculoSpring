@@ -96,36 +96,43 @@ async function initialize() {
     )
     .join("");
 
-  documentRoot.querySelectorAll("pre code").forEach((code) => {
-    hljs.highlightElement(code);
-    const pre = code.parentElement;
-    const wrapper = document.createElement("div");
-    wrapper.className = "code-block";
-    const header = document.createElement("div");
-    header.className = "code-header";
-    const language = [...code.classList]
-      .find((name) => name.startsWith("language-"))
-      ?.replace("language-", "");
-    const label = document.createElement("span");
-    label.textContent = language || "código";
-    const copy = document.createElement("button");
-    copy.type = "button";
-    copy.textContent = "Copiar";
-    copy.setAttribute("aria-label", `Copiar bloque de ${language || "código"}`);
-    copy.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(code.textContent);
-        copy.textContent = "Copiado";
-        notify("Código copiado al portapapeles.");
-        setTimeout(() => (copy.textContent = "Copiar"), 1800);
-      } catch {
-        notify("No se pudo copiar. Selecciona el código y usa Ctrl+C.");
-      }
+  documentRoot
+    .querySelectorAll(
+      "pre code:not([data-api-contract-request]):not([data-api-contract-response])",
+    )
+    .forEach((code) => {
+      hljs.highlightElement(code);
+      const pre = code.parentElement;
+      const wrapper = document.createElement("div");
+      wrapper.className = "code-block";
+      const header = document.createElement("div");
+      header.className = "code-header";
+      const language = [...code.classList]
+        .find((name) => name.startsWith("language-"))
+        ?.replace("language-", "");
+      const label = document.createElement("span");
+      label.textContent = language || "código";
+      const copy = document.createElement("button");
+      copy.type = "button";
+      copy.textContent = "Copiar";
+      copy.setAttribute(
+        "aria-label",
+        `Copiar bloque de ${language || "código"}`,
+      );
+      copy.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent);
+          copy.textContent = "Copiado";
+          notify("Código copiado al portapapeles.");
+          setTimeout(() => (copy.textContent = "Copiar"), 1800);
+        } catch {
+          notify("No se pudo copiar. Selecciona el código y usa Ctrl+C.");
+        }
+      });
+      header.append(label, copy);
+      pre.before(wrapper);
+      wrapper.append(header, pre);
     });
-    header.append(label, copy);
-    pre.before(wrapper);
-    wrapper.append(header, pre);
-  });
 
   documentRoot.querySelectorAll("table").forEach((table) => {
     const wrapper = document.createElement("div");
@@ -136,6 +143,32 @@ async function initialize() {
     table.before(wrapper);
     wrapper.append(table);
   });
+
+  const apiGraphRoot = documentRoot.querySelector("[data-api-graph]");
+  if (apiGraphRoot) {
+    const loadApiGraph = () =>
+      import("./api-graph.js")
+        .then(({ initApiGraph }) => initApiGraph(apiGraphRoot))
+        .catch((error) => {
+          console.error(error);
+          apiGraphRoot.classList.add("is-fallback");
+          apiGraphRoot.querySelector(".api-graph-stage").innerHTML =
+            '<p class="api-graph-fallback">No se pudo cargar la gráfica. La tabla posterior conserva la descripción completa de todas las APIs.</p>';
+        });
+    if ("IntersectionObserver" in window) {
+      const graphObserver = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          graphObserver.disconnect();
+          loadApiGraph();
+        },
+        { rootMargin: "600px 0px" },
+      );
+      graphObserver.observe(apiGraphRoot);
+    } else {
+      loadApiGraph();
+    }
+  }
 
   const sectionIndex = chapters.map((heading, index) => {
     const next = chapters[index + 1];
@@ -301,7 +334,9 @@ async function initialize() {
 
   if (location.hash) {
     requestAnimationFrame(() =>
-      document.querySelector(location.hash)?.scrollIntoView(),
+      document
+        .getElementById(decodeURIComponent(location.hash.slice(1)))
+        ?.scrollIntoView(),
     );
   }
 }
