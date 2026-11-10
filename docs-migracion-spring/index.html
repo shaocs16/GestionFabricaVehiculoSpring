@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f2f6f5" />
+    <meta
+      name="description"
+      content="Guía técnica completa para migrar Gestión Fábrica de Vehículos a Spring Boot, REST, MySQL y Docker."
+    />
+    <title>Fábrica Backend · Guía de migración</title>
+    <script>document.documentElement.classList.add("js")</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <aside class="sidebar" id="sidebar" aria-label="Navegación de la guía">
+      <a class="brand" href="#introduccion" translate="no">
+        <svg viewBox="0 0 42 42" aria-hidden="true">
+          <path d="M5 31V17l9 5V11l10 6V7h8v24" />
+          <path d="M3 31h36M10 31v-5h5v5m6 0v-5h5v5m6 0v-5h4v5" />
+        </svg>
+        <span>Fábrica Backend<small>Plan de migración Spring Boot</small></span>
+      </a>
+
+      <button class="menu-close" id="close-menu" type="button">Cerrar menú</button>
+
+      <nav class="primary-nav" aria-label="Acciones principales">
+        <a href="#introduccion" data-route="introduccion">Visión general</a>
+        <a href="#8-docker-compose-para-mysql" data-route="8-docker-compose-para-mysql">Docker y MySQL</a>
+        <a href="#9-sql-completo-para-crear-las-tablas" data-route="9-sql-completo-para-crear-las-tablas">Esquema SQL</a>
+      </nav>
+
+      <p class="nav-title">Documento completo</p>
+      <nav id="toc" class="toc" aria-label="Secciones"></nav>
+
+      <div class="sidebar-bottom">
+        <a class="download-link" href="./MIGRACION_SPRING_BOOT.md" download>
+          Descargar Markdown <span aria-hidden="true">↓</span>
+        </a>
+        <p>Fuente única · 15 capítulos · API, datos y despliegue.</p>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <button
+          class="menu-open"
+          id="open-menu"
+          type="button"
+          aria-controls="sidebar"
+          aria-expanded="false"
+        >
+          Menú
+        </button>
+        <p class="context" id="context">Guía técnica / Visión general</p>
+        <form class="search" id="search-form" role="search">
+          <label class="sr-only" for="search-input">Buscar en la documentación</label>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="8" cy="8" r="5.5" />
+            <path d="m12 12 5 5" />
+          </svg>
+          <input
+            id="search-input"
+            name="q"
+            type="search"
+            placeholder="Busca endpoints, Flyway, stock…"
+            autocomplete="off"
+          />
+          <kbd aria-hidden="true">Ctrl&nbsp;K</kbd>
+        </form>
+        <a class="source-link" href="./MIGRACION_SPRING_BOOT.md" download>Descargar guía</a>
+      </header>
+
+      <div class="sheet">
+        <main id="main" tabindex="-1">
+          <section class="overview" id="introduccion" aria-labelledby="page-title">
+            <div>
+              <p class="scope">Gestión Fábrica de Vehículos</p>
+              <h1 id="page-title">Migración completa a Spring Boot</h1>
+              <p class="lead">
+                Arquitectura, API REST, persistencia, simulación asíncrona,
+                configuración, Docker y esquema MySQL para sustituir por completo
+                la aplicación Java de consola.
+              </p>
+            </div>
+            <dl class="summary" aria-label="Resumen de la propuesta">
+              <div><dt>Base</dt><dd>Java 21</dd></div>
+              <div><dt>Framework</dt><dd>Spring Boot 3.5</dd></div>
+              <div><dt>Datos</dt><dd>MySQL 8.4</dd></div>
+              <div><dt>Esquema</dt><dd>Flyway</dd></div>
+            </dl>
+          </section>
+
+          <section class="assembly-map" aria-labelledby="assembly-map-title">
+            <div class="assembly-copy">
+              <h2 id="assembly-map-title">Del programa en memoria al backend persistente</h2>
+              <p>Cada estación representa una parte real del trabajo de migración.</p>
+            </div>
+            <ol>
+              <li><a href="#1-configuracion-de-spring-initializr"><span>Chasis</span>Proyecto base</a></li>
+              <li><a href="#3-arquitectura-recomendada"><span>Motor</span>Dominio y servicios</a></li>
+              <li><a href="#5-endpoints-rest-completos"><span>Tapicería</span>Contrato REST</a></li>
+              <li><a href="#7-configuracion-de-applicationyml"><span>Ruedas</span>MySQL y Docker</a></li>
+              <li><a href="#15-orden-recomendado-de-implementacion"><span>Terminado</span>Pruebas y entrega</a></li>
+            </ol>
+          </section>
+
+          <section class="document-section" aria-labelledby="document-title">
+            <header class="document-heading">
+              <div>
+                <h2 id="document-title">Documento de implementación</h2>
+                <p>Contenido íntegro y descargable desde la misma fuente.</p>
+              </div>
+              <button class="secondary-button" id="expand-all" type="button">Expandir código</button>
+            </header>
+            <article id="document" class="markdown"></article>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <span>Fábrica Backend · Documento técnico de migración</span>
+        <span>Spring Boot · REST · MySQL · Docker · Flyway</span>
+      </footer>
+    </div>
+
+    <section class="search-results" id="search-results" hidden role="region" aria-labelledby="search-title">
+      <header>
+        <div>
+          <h2 id="search-title">Resultados</h2>
+          <p id="search-summary">Escribe para buscar en toda la guía.</p>
+        </div>
+        <button id="close-search" type="button">Cerrar</button>
+      </header>
+      <div id="search-list" class="search-list"></div>
+    </section>
+
+    <div id="status" class="toast" role="status" aria-live="polite"></div>
+    <noscript>
+      <p class="noscript">Activa JavaScript para navegar por la web o descarga <a href="./MIGRACION_SPRING_BOOT.md">la documentación Markdown</a>.</p>
+    </noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
